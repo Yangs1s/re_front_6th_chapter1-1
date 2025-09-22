@@ -1,10 +1,12 @@
-const buildCategoryButtons = (categories = [], selectedValue = "") => {
-  if (!categories.length) {
+const buildCategoryButtons = (categories = {}, selectedValue = "") => {
+  console.log("buildCategoryButtons", categories, selectedValue);
+  if (!Object.keys(categories).length) {
     return '<div class="text-sm text-gray-500 italic">카테고리 로딩 중...</div>';
   }
 
-  return categories
-    .map(({ value, label }) => {
+  return Object.keys(categories)
+    .map(value => {
+      console.log("value", value, selectedValue);
       const isActive = value === selectedValue;
       const baseClass = "category1-filter-btn text-left px-3 py-2 text-sm rounded-md border transition-colors";
       const activeClass = isActive
@@ -13,7 +15,7 @@ const buildCategoryButtons = (categories = [], selectedValue = "") => {
 
       return `
         <button data-category1="${value}" class="${baseClass}${activeClass}">
-          ${label}
+          ${value}
         </button>
       `;
     })
@@ -34,7 +36,7 @@ const buildSelectOptions = (options = [], selectedValue) => {
 };
 
 export const FilterPanel = ({
-  categories = [],
+  categories = {},
   selectedCategory = "",
   showReset = true,
   limitOptions = [
