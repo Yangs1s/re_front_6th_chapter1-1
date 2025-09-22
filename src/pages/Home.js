@@ -1,10 +1,11 @@
-import { FilterPanel, LoadingIndicator, ProductSkeletonGrid, SearchBar } from "../components/index.js";
+import { FilterPanel, LoadingIndicator, SearchBar } from "../components/index.js";
 import PageLayout from "../components/layout/PageLayout.js";
+import ProductList from "../components/ProductList.js";
 import { withLifeCycle } from "../lib/withLifeCycle.js";
 import { loadProductsandCategories } from "../services/product.js";
 const Home = ctx => {
   const { products, categories } = ctx.state;
-  console.log("Home", products, ctx);
+
   return PageLayout({
     headerLeft: `
       <h1 class="text-xl font-bold text-gray-900">
@@ -20,8 +21,8 @@ const Home = ctx => {
         <div class="mb-6">
           <div>
             <!-- 상품 그리드 -->
-            ${ProductSkeletonGrid()}
-            ${LoadingIndicator()}
+        ${ProductList({ products })}
+        ${LoadingIndicator()}
           </div>
         </div>
   `,
@@ -31,9 +32,9 @@ const Home = ctx => {
 withLifeCycle(
   {
     async mounted(ctx) {
-      const { products: newProducts, categories: newCategories } = await loadProductsandCategories();
+      const { productResponse: newProducts, categories: newCategories } = await loadProductsandCategories();
       ctx.updateState({
-        products: newProducts,
+        products: newProducts.products,
         categories: newCategories,
       });
       console.log("mounted", ctx);

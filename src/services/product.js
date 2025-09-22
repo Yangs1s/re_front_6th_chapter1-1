@@ -1,8 +1,8 @@
 import { getCategories, getProduct, getProducts } from "../api/productApi";
 
 export const loadProductsandCategories = async () => {
-  const [products, categories] = await Promise.all([getProducts(), getCategories()]);
-  return { products, categories };
+  const [productResponse, categories] = await Promise.all([getProducts(), getCategories()]);
+  return { productResponse, categories };
 };
 
 export const loadProduct = async id => {

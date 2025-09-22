@@ -15,7 +15,8 @@
 //     "category4": "쇼핑백"
 // }
 
-const CartItem = ({ item }) => {
+const ProductItem = item => {
+  console.log("ProductItem", item);
   return `
    <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden product-card"
                    data-product-id="85067212996">
@@ -49,4 +50,4 @@ const CartItem = ({ item }) => {
   `;
 };
 
-export default CartItem;
+export default ProductItem;
