@@ -15,11 +15,13 @@
 //     "category4": "쇼핑백"
 // }
 
+const formatPrice = price => {
+  return String(price).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+};
 const ProductItem = item => {
-  console.log("ProductItem", item);
   return `
    <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden product-card"
-                   data-product-id="85067212996">
+                   data-product-id=${item.productId}>
                 <!-- 상품 이미지 -->
                 <div class="aspect-square bg-gray-100 overflow-hidden cursor-pointer product-image">
                   <img src=${item.image}
@@ -35,7 +37,7 @@ const ProductItem = item => {
                     </h3>
                     <p class="text-xs text-gray-500 mb-2"></p>
                     <p class="text-lg font-bold text-gray-900">
-                      ${item.lprice}
+                      ${formatPrice(item.lprice)}원
                     </p>
                   </div>
                   <!-- 장바구니 버튼 -->

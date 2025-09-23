@@ -1,7 +1,7 @@
 import { getCategories, getProduct, getProducts } from "../api/productApi";
 
-export const loadProductsandCategories = async () => {
-  const [productResponse, categories] = await Promise.all([getProducts(), getCategories()]);
+export const loadProductsandCategories = async (params = {}) => {
+  const [productResponse, categories] = await Promise.all([getProducts(params), getCategories()]);
   return { productResponse, categories };
 };
 

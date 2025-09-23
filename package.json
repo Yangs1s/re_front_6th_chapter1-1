@@ -20,7 +20,8 @@
     "test:e2e:ui": "playwright test --ui",
     "test:e2e:report": "npx playwright show-report",
     "test:generate": "playwright codegen localhost:5173",
-    "prepare": "husky"
+    "prepare": "husky",
+    "vitest-preview": "vitest-preview"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
@@ -52,5 +53,8 @@
     "workerDirectory": [
       "public"
     ]
+  },
+  "dependencies": {
+    "vitest-preview": "0.0.2-alpha.1"
   }
 }

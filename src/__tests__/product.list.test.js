@@ -1,9 +1,9 @@
 import { getByRole, screen, waitFor } from "@testing-library/dom";
-import { afterEach, beforeAll, beforeEach, describe, expect, test } from "vitest";
-import { server } from "./mockServerHandler.js";
 import { userEvent } from "@testing-library/user-event";
-
-const goTo = (path) => {
+import { afterEach, beforeAll, beforeEach, describe, expect, test } from "vitest";
+import { debug } from "vitest-preview";
+import { server } from "./mockServerHandler.js";
+const goTo = path => {
   window.history.pushState({}, "", path);
   window.dispatchEvent(new Event("popstate"));
 };
@@ -29,12 +29,13 @@ describe("1. 상품 목록 로딩", () => {
 
     // 상품 모두 렌더링되었는지 확인
     expect(
-      await screen.findByText(/pvc 투명 젤리 쇼핑백 1호 와인 답례품 구디백 비닐 손잡이 미니 간식 선물포장/i),
+      await screen.findByText(/pvc 투명 젤리 쇼핑백 1호 와인 답례품 구디백 비닐 손잡이 미니 간식 선물포장/i)
     ).toBeInTheDocument();
     expect(
-      screen.getByText(/고양이 난간 안전망 복층 베란다 방묘창 방묘문 방충망 캣도어 일반형검정/i),
+      screen.getByText(/고양이 난간 안전망 복층 베란다 방묘창 방묘문 방충망 캣도어 일반형검정/i)
     ).toBeInTheDocument();
 
+    debug();
     expect(screen.getByText(/총 의 상품/i)).toBeInTheDocument();
     expect(screen.getByText("340개")).toBeInTheDocument();
   });
@@ -82,7 +83,7 @@ describe("3. 페이지당 상품 수 선택", () => {
     expect(limitSelect.value).toBe("20");
 
     // 옵션들이 올바르게 있는지 확인
-    const options = Array.from(limitSelect.options).map((opt) => opt.value);
+    const options = Array.from(limitSelect.options).map(opt => opt.value);
     expect(options).toContain("10");
     expect(options).toContain("20");
     expect(options).toContain("50");
@@ -96,7 +97,7 @@ describe("3. 페이지당 상품 수 선택", () => {
       await screen.findByRole("heading", {
         level: 3,
         name: "창틀벌레 모풍지판 창문 벌레 차단 틈새 창문틈 막이 방충망",
-      }),
+      })
     ).toBeInTheDocument();
 
     const limitSelect = document.querySelector("#limit-select");
@@ -107,8 +108,8 @@ describe("3. 페이지당 상품 수 선택", () => {
         screen.queryByRole("heading", {
           level: 3,
           name: "창틀벌레 모풍지판 창문 벌레 차단 틈새 창문틈 막이 방충망",
-        }),
-      ).not.toBeInTheDocument(),
+        })
+      ).not.toBeInTheDocument()
     );
 
     expect(document.querySelectorAll(".product-card").length).toBe(10);
@@ -125,10 +126,10 @@ describe("4. 상품 정렬 기능", () => {
 
     // 정렬 옵션들 확인
     const options = Array.from(sortSelect.options);
-    const optionTexts = options.map((opt) => opt.textContent);
+    const optionTexts = options.map(opt => opt.textContent);
 
-    expect(optionTexts.some((text) => text.includes("가격"))).toBe(true);
-    expect(optionTexts.some((text) => text.includes("낮은순") || text.includes("높은순"))).toBe(true);
+    expect(optionTexts.some(text => text.includes("가격"))).toBe(true);
+    expect(optionTexts.some(text => text.includes("낮은순") || text.includes("높은순"))).toBe(true);
   });
 
   test("정렬 변경 시 목록에 반영된다", async () => {
@@ -174,7 +175,7 @@ describe("5. 무한 스크롤 페이지네이션", () => {
 
     expect(await screen.findByText("상품을 불러오는 중...")).toBeInTheDocument();
     expect(
-      await screen.findByText("고양이 난간 안전망 복층 베란다 방묘창 방묘문 방충망 캣도어 일반형검정1mx1m"),
+      await screen.findByText("고양이 난간 안전망 복층 베란다 방묘창 방묘문 방충망 캣도어 일반형검정1mx1m")
     ).toBeInTheDocument();
   });
 });

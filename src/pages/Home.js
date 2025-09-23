@@ -3,6 +3,8 @@ import PageLayout from "../components/layout/PageLayout.js";
 import ProductList from "../components/ProductList.js";
 import { withLifeCycle } from "../lib/withLifeCycle.js";
 import { loadProductsandCategories } from "../services/product.js";
+import { getUrlFilters } from "../utils/getUrlFilters.js";
+
 const Home = ctx => {
   const { products, categories } = ctx.state;
 
@@ -19,9 +21,19 @@ const Home = ctx => {
         </div>
         <!-- 상품 목록 -->
         <div class="mb-6">
-          <div>
+        <div>
             <!-- 상품 그리드 -->
-        ${ProductList({ products })}
+        ${
+          products?.pagination?.total > 0
+            ? `
+         <div class="mb-4 text-sm text-gray-600">
+          총 <span class="font-medium text-gray-900">${products.pagination.total.toLocaleString()}개</span>의 상품
+        </div>
+      </div>
+          `
+            : ""
+        }
+        ${ProductList(products?.products)}
         ${LoadingIndicator()}
           </div>
         </div>
@@ -32,15 +44,31 @@ const Home = ctx => {
 withLifeCycle(
   {
     async mounted(ctx) {
-      const { productResponse: newProducts, categories: newCategories } = await loadProductsandCategories();
+      const { productResponse: newProducts, categories: newCategories } = await loadProductsandCategories({
+        category1: "",
+        category2: "",
+        limit: 20,
+        sort: "price_asc",
+        search: "",
+      });
       ctx.updateState({
-        products: newProducts.products,
+        products: newProducts,
         categories: newCategories,
       });
-      console.log("mounted", ctx);
     },
-    updated(prevCtx, nextCtx) {
+    async updated(prevCtx, nextCtx) {
       console.log("updated", prevCtx, nextCtx);
+
+      const urlFilters = getUrlFilters(nextCtx);
+      const qs = new URLSearchParams(window.location.search).toString();
+      if (qs === nextCtx.state.query) return;
+
+      const { productResponse: newProducts, categories: newCategories } = await loadProductsandCategories(urlFilters);
+      console.log("newProducts", newProducts, newCategories);
+      nextCtx.updateState({
+        products: newProducts,
+        query: qs,
+      });
     },
     unmounted(ctx) {
       console.log("unmounted", ctx);

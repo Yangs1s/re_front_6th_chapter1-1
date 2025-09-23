@@ -34,7 +34,9 @@ const ProductList = products => {
   console.log("ProductList", products);
   return `
     <div class="grid grid-cols-2 gap-4 mb-6" id="products-grid">
-      ${products.products?.length > 0 ? ProductGrid({ products: products.products }) : ProductSkeletonGrid()}
+
+
+      ${products?.length > 0 ? ProductGrid({ products: products ?? [] }) : ProductSkeletonGrid()}
     </div>
   `;
 };

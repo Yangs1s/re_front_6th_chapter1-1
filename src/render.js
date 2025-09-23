@@ -14,7 +14,7 @@ export const render = () => {
   const rootElement = document.getElementById("root");
   const route = router.route;
   if (!rootElement || !route) return;
-
+  console.log("render", route);
   const component = router.target; // 현재 라우트가 가리키는 컴포넌트
   if (!component) return;
 
@@ -22,6 +22,7 @@ export const render = () => {
   // 컴포넌트와 라이프사이클 훅이 공유하는 렌더 컨텍스트를 구성한다
   const nextContext = {
     route, // 라우터가 찾은 현재 경로 정보
+    query: router.query,
     params: route.params ?? {}, // 동적 세그먼트가 있을 때 전달되는 URL 파라미터
     state: activeContext?.state ?? {}, // 동일 컴포넌트 재렌더 시 이전 state를 재사용
     // 컴포넌트 내부에서 호출할 수 있는 상태 갱신 헬퍼
@@ -53,8 +54,11 @@ export const render = () => {
   }
 
   // 다른 컴포넌트로 전환되면 정리 루틴을 먼저 실행한다
-  activeCleanup?.();
   // 이전 컴포넌트의 라이프사이클 훅을 호출한다
+  if (typeof activeCleanup === "function") {
+    activeCleanup();
+    activeCleanup = null;
+  }
   lifeCycleRegistry.get(activeComponent)?.unmounted?.(activeContext);
 
   const html = component(nextContext); // 새 컴포넌트를 실제 DOM에 반영

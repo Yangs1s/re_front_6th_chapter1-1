@@ -1,12 +1,10 @@
 const buildCategoryButtons = (categories = {}, selectedValue = "") => {
-  console.log("buildCategoryButtons", categories, selectedValue);
   if (!Object.keys(categories).length) {
     return '<div class="text-sm text-gray-500 italic">카테고리 로딩 중...</div>';
   }
 
   return Object.keys(categories)
     .map(value => {
-      console.log("value", value, selectedValue);
       const isActive = value === selectedValue;
       const baseClass = "category1-filter-btn text-left px-3 py-2 text-sm rounded-md border transition-colors";
       const activeClass = isActive
@@ -14,7 +12,7 @@ const buildCategoryButtons = (categories = {}, selectedValue = "") => {
         : " bg-white border-gray-300 text-gray-700 hover:bg-gray-50";
 
       return `
-        <button data-category1="${value}" class="${baseClass}${activeClass}">
+        <button data-category1="${value}" class="${baseClass}${activeClass} category-item">
           ${value}
         </button>
       `;
