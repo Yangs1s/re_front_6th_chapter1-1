@@ -2,13 +2,13 @@ import { findByText, getByText, queryByText, screen } from "@testing-library/dom
 import { userEvent } from "@testing-library/user-event";
 import { afterEach, beforeAll, beforeEach, describe, expect, test } from "vitest";
 
-const goTo = (path) => {
+const goTo = path => {
   window.history.pushState({}, "", path);
   window.dispatchEvent(new Event("popstate"));
 };
 
 // 장바구니에 상품을 추가하는 헬퍼 함수
-const addProductToCart = async (productName) => {
+const addProductToCart = async productName => {
   const productElement = await findByText(document.querySelector("#products-grid"), new RegExp(productName, "i"));
   const cartButton = productElement.closest(".product-card").querySelector(".add-to-cart-btn");
   await userEvent.click(cartButton);
@@ -272,7 +272,7 @@ describe.sequential("5. 장바구니 전체 선택", () => {
 
     // 모든 상품의 체크박스가 선택되었는지 확인
     const itemCheckboxes = document.querySelectorAll(".cart-item-checkbox");
-    itemCheckboxes.forEach((checkbox) => {
+    itemCheckboxes.forEach(checkbox => {
       expect(checkbox.checked).toBe(true);
     });
   });
@@ -289,10 +289,10 @@ describe.sequential("5. 장바구니 전체 선택", () => {
 
     // 전체 선택 후 전체 해제
     await userEvent.click(document.querySelector("#cart-modal-select-all-checkbox"));
-    expect([...document.querySelectorAll(".cart-item-checkbox")].map((v) => v.checked)).toEqual([true, true]);
+    expect([...document.querySelectorAll(".cart-item-checkbox")].map(v => v.checked)).toEqual([true, true]);
 
     await userEvent.click(document.querySelector("#cart-modal-select-all-checkbox"));
-    expect([...document.querySelectorAll(".cart-item-checkbox")].map((v) => v.checked)).toEqual([false, false]);
+    expect([...document.querySelectorAll(".cart-item-checkbox")].map(v => v.checked)).toEqual([false, false]);
   });
 });
 

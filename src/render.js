@@ -1,6 +1,7 @@
 import { lifeCycleRegistry } from "./lib/lifeCycle.js";
 import { router } from "./router/Router.js";
 import { routes } from "./router/routes.js";
+import { uiStore } from "./store/index.js";
 routes.forEach(route => {
   router.addRoute(route.path, route.component);
 });
@@ -72,4 +73,9 @@ export const render = () => {
 
 export const initRender = () => {
   router.subscribe(render);
+  // UiStore 상태 변경 시에도 재렌더링
+  uiStore.subscribe(() => {
+    console.log("UiStore state changed, re-rendering...");
+    render();
+  });
 };

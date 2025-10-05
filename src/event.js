@@ -1,5 +1,6 @@
 import { Router } from "./lib/Router.js";
 import { router } from "./router/Router.js";
+import { uiStore } from "./store/index.js";
 import { addEvent } from "./utils/eventUtil.js";
 export const registerProductDetailEvent = () => {
   addEvent("click", ".product-image, .product-info", async e => {
@@ -18,7 +19,6 @@ export const selectCategoryEvent = () => {
     const category2 = e.target.dataset.category2;
     const url = Router.getUrl({ category1, category2, page: 1 }, window.location.origin);
     router.navigate(url);
-    console.log("url", url, category1, category2);
   });
 };
 
@@ -36,9 +36,26 @@ export const selectLimitEvent = () => {
     router.navigate(url);
   });
 };
+
+const openCartModalEvent = () => {
+  addEvent("click", "#cart-icon-btn", () => {
+    console.log("Cart icon clicked!");
+    uiStore.openCartModal();
+  });
+};
+
+const closeCartModalEvent = () => {
+  addEvent("click", "#cart-modal-close-btn", () => {
+    console.log("Cart modal close button clicked!");
+    uiStore.closeCartModal();
+  });
+};
+
 export function registerAllEvent() {
   selectSortEvent();
   selectLimitEvent();
   registerProductDetailEvent();
   selectCategoryEvent();
+  openCartModalEvent();
+  closeCartModalEvent();
 }

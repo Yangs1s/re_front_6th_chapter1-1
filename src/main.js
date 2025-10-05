@@ -15,6 +15,7 @@ async function main() {
   registerGlobalEvent();
   // 렌더링 초기화
   initRender();
+
   // 구독 후 라우터 시작
   router.start();
 }
