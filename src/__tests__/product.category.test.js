@@ -1,8 +1,8 @@
-import { afterEach, beforeAll, beforeEach, describe, expect, test } from "vitest";
 import { screen } from "@testing-library/dom";
 import { userEvent } from "@testing-library/user-event";
+import { afterEach, beforeAll, beforeEach, describe, expect, test } from "vitest";
 
-const goTo = (path) => {
+const goTo = path => {
   window.history.pushState({}, "", path);
   window.dispatchEvent(new Event("popstate"));
 };

@@ -64,7 +64,13 @@ const EmptyCart = () => `
 `;
 
 // 장바구니 모달 컴포넌트
-export const CartModal = ({ isOpen = false, items = [], selectedItems = [], totalAmount = 0 }) => {
+export const CartModal = ({
+  isOpen = false,
+  items = [],
+  selectedItems = [],
+  totalAmount = 0,
+  isAllSelected = false,
+}) => {
   if (!isOpen) return "";
 
   const hasItems = items.length > 0;
@@ -103,7 +109,7 @@ export const CartModal = ({ isOpen = false, items = [], selectedItems = [], tota
               <!-- 전체 선택 섹션 -->
               <div class="p-4 border-b border-gray-200 bg-gray-50">
                 <label class="flex items-center text-sm text-gray-700">
-                  <input type="checkbox" id="cart-modal-select-all-checkbox" class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500 mr-2">
+                  <input type="checkbox" ${isAllSelected ? "checked" : ""} id="cart-modal-select-all-checkbox" class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500 mr-2">
                   전체선택 (${items.length}개)
                 </label>
               </div>

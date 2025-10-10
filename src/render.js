@@ -1,7 +1,7 @@
 import { lifeCycleRegistry } from "./lib/lifeCycle.js";
 import { router } from "./router/Router.js";
 import { routes } from "./router/routes.js";
-import { uiStore } from "./store/index.js";
+import { cartStore, uiStore } from "./store/index.js";
 routes.forEach(route => {
   router.addRoute(route.path, route.component);
 });
@@ -14,10 +14,17 @@ let activeContext = null;
 export const render = () => {
   const rootElement = document.getElementById("root");
   const route = router.route;
+
   if (!rootElement || !route) return;
-  console.log("render", route);
+
   const component = router.target; // 현재 라우트가 가리키는 컴포넌트
+
   if (!component) return;
+
+  // localStorage가 비어있으면 cartStore도 초기화 (테스트 환경 대응)
+  if (!localStorage.getItem("cart") && cartStore.state.cart.length > 0) {
+    cartStore.clearCart();
+  }
 
   const lifecycle = lifeCycleRegistry.get(component) ?? {};
   // 컴포넌트와 라이프사이클 훅이 공유하는 렌더 컨텍스트를 구성한다
@@ -65,17 +72,30 @@ export const render = () => {
   const html = component(nextContext); // 새 컴포넌트를 실제 DOM에 반영
   rootElement.innerHTML = html;
 
+  console.log("🎨 HTML rendered, length:", html.length);
+  console.log("🎨 Checking for h1...");
+  const h1Elements = rootElement.querySelectorAll("h1");
+  console.log("🎨 h1 count:", h1Elements.length);
+  h1Elements.forEach((h1, i) => {
+    console.log(`🎨 h1[${i}]:`, h1.textContent);
+  });
+
   // 새 컴포넌트 마운트 훅 실행 및 정리 함수 기억
   activeCleanup = lifecycle.mounted?.(nextContext) ?? null;
   activeComponent = component;
   activeContext = nextContext;
 };
 
+// 초기 렌더링
+// 렌더링 전에 스토어 상태 변경 시 재렌더링 해줘야 함
 export const initRender = () => {
   router.subscribe(render);
   // UiStore 상태 변경 시에도 재렌더링
   uiStore.subscribe(() => {
-    console.log("UiStore state changed, re-rendering...");
+    render();
+  });
+  // CartStore 상태 변경 시에도 재렌더링
+  cartStore.subscribe(() => {
     render();
   });
 };

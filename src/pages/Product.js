@@ -1,7 +1,12 @@
 import PageLayout from "../components/layout/PageLayout.js";
 import ProductDetailLayout from "../components/ProductDetailLayout.js";
+import { withLifeCycle } from "../lib/withLifeCycle.js";
+import { loadProduct } from "../services/product.js";
 
-const Product = () => {
+const Product = ctx => {
+  const { product } = ctx.state;
+
+  console.log("Product", product);
   return PageLayout({
     headerLeft: `
              <div class="flex items-center space-x-3">
@@ -13,8 +18,31 @@ const Product = () => {
               <h1 class="text-lg font-bold text-gray-900">상품 상세</h1>
             </div>
             `,
-    children: ProductDetailLayout(),
+    children: ProductDetailLayout(product),
   });
 };
+
+withLifeCycle(
+  {
+    state: {
+      product: null,
+    },
+    async mounted(ctx) {
+      const product = await loadProduct(ctx.params.id);
+      // console.log("Product mounted", product);
+      ctx.updateState({
+        product,
+      });
+      console.log("Product mounted", ctx.state.product);
+    },
+    updated(prevCtx, nextCtx) {
+      console.log("Product updated", prevCtx, nextCtx);
+    },
+    unmounted(ctx) {
+      console.log("Product unmounted", ctx);
+    },
+  },
+  Product
+);
 
 export default Product;

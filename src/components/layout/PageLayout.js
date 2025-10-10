@@ -1,6 +1,7 @@
 import { cartStore, uiStore } from "../../store/index.js";
 import { CartModal } from "../CartModal.js";
 import { Footer } from "../layout/Footer.js";
+import { ToastItem } from "../Toast.js";
 const cartIconBtn = () => {
   return `
     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -11,7 +12,9 @@ const cartIconBtn = () => {
 };
 
 const PageLayout = ({ headerLeft, children }) => {
-  console.log("uiStore.state", uiStore.state);
+  // 안전한 스토어 상태 접근
+  const cartState = cartStore.state || {};
+  const uiState = uiStore.state || {};
 
   return `
      <div class="min-h-screen bg-gray-50">
@@ -25,9 +28,9 @@ const PageLayout = ({ headerLeft, children }) => {
               <button id="cart-icon-btn" class="relative p-2 text-gray-700 hover:text-gray-900 transition-colors">
               ${cartIconBtn()}
               ${
-                cartStore.state?.totalAmount
+                cartState.count
                   ? `<span class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
-                ${cartStore.state?.totalAmount}
+                ${cartState.count}
               </span>`
                   : ""
               }
@@ -42,11 +45,13 @@ const PageLayout = ({ headerLeft, children }) => {
          </main>
          ${Footer()}
          ${CartModal({
-           isOpen: uiStore.state.cartModalOpen,
-           items: [],
-           selectedItems: [],
-           totalAmount: 0,
+           isOpen: uiState.cartModalOpen || false,
+           items: cartState.cart || [],
+           selectedItems: cartStore.selectedCartItems || [],
+           totalAmount: cartState.totalAmount || 0,
+           isAllSelected: cartState.isAllSelected || false,
          })}
+         ${uiState.toast ? ToastItem({ type: uiState.toast.type, message: uiState.toast.message }) : ""}
       </div>
     `;
 };

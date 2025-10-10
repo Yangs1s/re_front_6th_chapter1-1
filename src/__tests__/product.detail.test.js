@@ -2,7 +2,7 @@ import { screen } from "@testing-library/dom";
 import { userEvent } from "@testing-library/user-event";
 import { afterEach, beforeAll, describe, expect, test } from "vitest";
 
-const goTo = (path) => {
+const goTo = path => {
   window.history.pushState({}, "", path);
   window.dispatchEvent(new Event("popstate"));
 };
@@ -35,6 +35,13 @@ const 상품_상세페이지_접속 = async () => {
     level: 1,
     name: "PVC 투명 젤리 쇼핑백 1호 와인 답례품 구디백 비닐 손잡이 미니 간식 선물포장",
   });
+
+  console.log("🔍 Step 5: 상세 페이지 로딩 대기...");
+  await screen.findByRole("heading", {
+    level: 1,
+    name: "PVC 투명 젤리 쇼핑백 1호 와인 답례품 구디백 비닐 손잡이 미니 간식 선물포장",
+  });
+  console.log("🔍 Step 6: 상세 페이지 로딩 완료!");
 };
 
 describe("1. 상품 클릭시 상세 페이지 이동", () => {
@@ -47,12 +54,12 @@ describe("1. 상품 클릭시 상세 페이지 이동", () => {
 
     // 상품 제목 확인
     expect(
-      await screen.findByText("PVC 투명 젤리 쇼핑백 1호 와인 답례품 구디백 비닐 손잡이 미니 간식 선물포장"),
+      await screen.findByText("PVC 투명 젤리 쇼핑백 1호 와인 답례품 구디백 비닐 손잡이 미니 간식 선물포장")
     ).toBeInTheDocument();
 
     // 상품 이미지 확인
     expect(
-      screen.getByAltText("PVC 투명 젤리 쇼핑백 1호 와인 답례품 구디백 비닐 손잡이 미니 간식 선물포장"),
+      screen.getByAltText("PVC 투명 젤리 쇼핑백 1호 와인 답례품 구디백 비닐 손잡이 미니 간식 선물포장")
     ).toBeInTheDocument();
 
     // 가격 정보 확인

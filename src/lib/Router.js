@@ -118,7 +118,6 @@ export class Router {
     return params.toString();
   }
   static getUrl(newQuery, baseUrl = "") {
-    console.log("newQuery", newQuery);
     const currentQuery = Router.parseQuery();
     const updateQuery = { ...currentQuery, ...newQuery };
 

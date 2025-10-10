@@ -7,7 +7,9 @@ export const loadProductsandCategories = async (params = {}) => {
 
 export const loadProduct = async id => {
   const response = await getProduct(id);
-  return await response.json();
+
+  console.log("loadProduct", response);
+  return response;
 };
 
 export const loadCategories = async () => {

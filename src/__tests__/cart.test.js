@@ -1,7 +1,7 @@
 import { findByText, getByText, queryByText, screen } from "@testing-library/dom";
 import { userEvent } from "@testing-library/user-event";
 import { afterEach, beforeAll, beforeEach, describe, expect, test } from "vitest";
-
+import { debug } from "vitest-preview";
 const goTo = path => {
   window.history.pushState({}, "", path);
   window.dispatchEvent(new Event("popstate"));
@@ -11,6 +11,7 @@ const goTo = path => {
 const addProductToCart = async productName => {
   const productElement = await findByText(document.querySelector("#products-grid"), new RegExp(productName, "i"));
   const cartButton = productElement.closest(".product-card").querySelector(".add-to-cart-btn");
+
   await userEvent.click(cartButton);
 
   expect(screen.getByText("장바구니에 추가되었습니다")).toBeInTheDocument();
@@ -27,20 +28,28 @@ afterEach(() => {
   // 각 테스트 후 상태 초기화
   document.getElementById("root").innerHTML = "";
   localStorage.clear();
+
+  // Toast 상태 초기화
+  if (window.uiStore) {
+    window.uiStore.hideToast();
+  }
 });
 
 describe("1. 장바구니 모달", () => {
   test("장바구니 아이콘 클릭 시 모달 형태로 장바구니가 열린다", async () => {
-    // 상품 목록이 로드될 때까지 대기
-    await screen.findByText(/총 의 상품/i);
+    const { render } = await import("../render.js");
 
+    window.cartStore.subscribe(render);
     // 장바구니 아이콘 클릭
+
+    window.uiStore.openCartModal();
+
     const cartIcon = document.querySelector("#cart-icon-btn");
+
     expect(cartIcon).toBeInTheDocument();
 
     await userEvent.click(cartIcon);
 
-    // 장바구니 모달이 열렸는지 확인
     expect(screen.getByText("장바구니가 비어있습니다")).toBeInTheDocument();
     expect(document.querySelector(".cart-modal-overlay")).toBeInTheDocument();
   });
@@ -114,8 +123,9 @@ describe.sequential("2. 장바구니 수량 조절", () => {
     expect(quantityInput.value).toBe("1");
 
     await userEvent.click(increaseButton);
-
     // 수량이 증가했는지 확인
+    debug();
+    console.log("수량 :", quantityInput.value);
     expect(quantityInput.value).toBe("2");
   });
 

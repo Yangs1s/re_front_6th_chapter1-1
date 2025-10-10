@@ -24,14 +24,12 @@ const ProductSkeletonGrid = ({ count = 4 } = {}) => {
 };
 
 const ProductGrid = ({ products }) => {
-  console.log("ProductGrid", products);
   return `
         ${products?.map(product => ProductItem(product)).join("")}
        `;
 };
 
 const ProductList = products => {
-  console.log("ProductList", products);
   return `
     <div class="grid grid-cols-2 gap-4 mb-6" id="products-grid">
 

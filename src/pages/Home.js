@@ -57,8 +57,6 @@ withLifeCycle(
       });
     },
     async updated(prevCtx, nextCtx) {
-      console.log("updated", prevCtx, nextCtx);
-
       const urlFilters = getUrlFilters(nextCtx);
       const qs = new URLSearchParams(window.location.search).toString();
       if (qs === nextCtx.state.query) return;
@@ -71,7 +69,7 @@ withLifeCycle(
       });
     },
     unmounted(ctx) {
-      console.log("unmounted", ctx);
+      return ctx;
     },
   },
   Home

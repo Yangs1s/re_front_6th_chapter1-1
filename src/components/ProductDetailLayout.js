@@ -1,9 +1,9 @@
 import ProductDetailMain from "./ProductDetailMain.js";
 
-const ProductDetailLayout = () => `
+const ProductDetailLayout = product => `
   <div class="min-h-screen bg-gray-50">
 
-    ${ProductDetailMain()}
+    ${ProductDetailMain(product)}
   </div>
 `;
 
