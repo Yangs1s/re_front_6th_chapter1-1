@@ -78,7 +78,7 @@ const addToCartEvent = () => {
     const productId = productCard.dataset.productId;
 
     // 상품 정보 수집
-    const title = productCard.querySelector("h3").textContent.trim();
+    const title = productCard.querySelector("h1").textContent.trim();
     const priceText = productCard.querySelector("p.text-lg").textContent;
     const price = parseInt(priceText.replace(/[^0-9]/g, ""));
     const image = productCard.querySelector("img").src;
